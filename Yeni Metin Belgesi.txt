@@ -394,3 +394,21 @@ BEGIN
         VALUES (customer2_id, product_keyboard_id, 5, 'Yazarken çok keyifli, tuş hissiyatı güzel.');
     END IF;
 END $$;
+
+--SORGULAR
+SELECT * FROM customers inner join orders ON customers.customer_id=orders.customer_id
+WHERE customers.customer_id=1 
+--Bu sorgu, customer_id’si 1 olan müşterinin yaptığı tüm siparişleri ve müşteri bilgilerini birlikte getirir.
+
+SELECT c.category_id ,products.product_name, review.comment, first_name,last_name FROM customers inner join review ON customers.customer_id=review.customer_id
+inner join products ON products.product_id=review.product_id
+inner join categories  as c ON c.category_id=products.category_id
+WHERE c.category_id=3
+--Bu sorgu, category_id’si 3 olan kategorideki ürünlere yapılan yorumları ve yorum yapan müşterinin ad-soyad bilgilerini listeler.
+
+SELECT address.city FROM order_items inner join orders ON order_items.order_id=orders.order_id
+inner join customers ON  customers.customer_id=orders.customer_id
+inner join address ON address.customer_id=customers.customer_id
+WHERE order_items.unit_price<500
+--Bu sorgu, birim fiyatı 500’den düşük olan siparişlerin ait olduğu müşterilerin şehir bilgilerini getirir.
+
