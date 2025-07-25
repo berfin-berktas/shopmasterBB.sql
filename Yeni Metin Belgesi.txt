@@ -412,3 +412,159 @@ inner join address ON address.customer_id=customers.customer_id
 WHERE order_items.unit_price<500
 --Bu sorgu, birim fiyatı 500’den düşük olan siparişlerin ait olduğu müşterilerin şehir bilgilerini getirir.
 
+-- employee_id’si 2 olan çalışanın işlediği tüm siparişlerin order_id ve status bilgileri ile çalışan ad-soyadı birlikte listeleyen sorgu
+
+SELECT employees.first_name, employees.last_name, orders.order_id, orders.status
+FROM employees
+INNER JOIN orders ON employees.employee_id = orders.handled_by
+WHERE employees.employee_id = 2 ;
+
+-- Malatya şehrinde adres kaydı bulunan müşterilerin ad, soyad, şehir ve sokak bilgilerini listeleyen sorgu
+
+SELECT customers.first_name, customers.last_name, address.city, address.street
+FROM customers
+INNER JOIN address ON customers.customer_id = address.customer_id
+WHERE address.city = 'malatya';
+
+-- Birim fiyatı 1000'den büyük olan siparişlerin ürün adı, birim fiyatı ve siparişi veren müşterinin ad-soyad bilgilerini getiren sorgu
+
+SELECT customers.first_name, customers.last_name, products.product_name, order_items.unit_price
+FROM order_items
+INNER JOIN products ON order_items.product_id = products.product_id
+INNER JOIN orders ON order_items.order_id = orders.order_id
+INNER JOIN customers ON orders.customer_id = customers.customer_id
+WHERE order_items.unit_price >1000 ;
+
+-- employee_id’si 1 olan yöneticinin yönettiği çalışanların ad-soyad bilgilerini ve yöneticinin ad-soyadını birlikte getiren sorgu
+
+SELECT manager.first_name, manger.last_name, employees.first_name, employees.last_name
+FROM employees
+INNER JOIN employees manager ON employee.manager_id = manager.employee_id
+WHERE employees.employee_id = 1;
+
+
+-- customer_id’si 2 olan müşterinin hangi ürünleri sipariş ettiğini ve miktarını gösteren sorgu
+
+SELECT customer.first_name, customer.last_name, products.product_name, order_items.quantity
+FROM order_items
+INNER JOIN orders ON order_items.order_id = orders.order_id
+INNER JOIN customers ON orders.customer_id = customers.customer_id
+INNER JOIN products ON order_items.product_id = products.product_id
+WHERE customers.customer_id = 2 ;
+
+-- Kategori ID’si 1 olan ürünlerin hangi tedarikçi tarafından sağlandığını ve ürün adlarını gösteren sorgu
+
+SELECT suppliers.supplier_name, products.product_name, categories.cetegory_name
+FROM products
+INNER JOIN suppliers ON products.supplier_id = suppliers.supplier_id
+INNER JOIN categories ON products.category_id = categories.category_id
+WHERE categories.category_id = 1;
+
+-- Kategori ID’si 2 olan ürünlere yapılan yorumları, yorum yapan müşterilerin ad-soyad bilgisini ve ürün adını listeleyen sorgu
+
+SELECT customers.first_name, customers.last_name, products.product_name, review.comment, categories.cetegory_name
+FROM review
+INNER JOIN customers ON review.customer_id = customers.customer_id
+INNER JOIN products ON review.product_id = products.product_id
+INNER JOIN categories ON products.category_id = categories.category_id
+WHERE categories.category_id = 2;
+
+-- Birim fiyatı 300’den düşük olan siparişlerin ait olduğu müşterilerin ad, soyad ve şehir bilgilerini gösteren sorgu
+
+SELECT customers.first_name, customers.last_name, address.city, order_items.unite_price
+FROM order_items
+INNER JOIN orders ON order_items.order_id = orders.order_id
+INNER JOIN customers ON orders.customer_id = customers.customer_id
+INNER JOIN address ON customers.customer_id = address.customer_id
+WHERE order_items.unit_price < 300;
+
+-- order_id’si 5 olan siparişte hangi ürünlerin kaçar adet sipariş edildiğini ve ürünlerin fiyatını gösteren sorgu
+
+SELECT products.product_name, order_items.quantity, order_items.unit_price
+FROM order_items
+INNER JOIN products ON order_items.product_id = products.product_id
+WHERE order_items.order_id = 5;
+
+-- Tedarikçi ID’si 3 olan tedarikçinin sağladığı ürünlerin adını ve hangi kategoriye ait olduklarını listelemek isteyen sorgu
+
+SELECT products.product_name, suppliers.supplier_id, categories.cetegory_name
+FROM products
+INNER JOIN suppliers ON products.supplier_id = suppliers.product_id
+INNER JOIN categories ON products.category_id = categories.category_id
+WHERE suppliers.supplier_id = 3;
+
+-- customer_id’si 4 olan müşterinin yaptığı yorumları ve bu yorumların ait olduğu ürün adlarını gösteren sorgu
+
+SELECT customers.first_name, customers.last_name, review.comment, products.product_name
+FROM review
+INNER JOIN customers ON review.customer_id = customers.customer_id
+INNER JOIN products ON review.product_id = products.product_id
+WHERE customers.customer_id = 4;
+
+-- city bilgisi ‘Ankara’ olan müşterilerin yaptığı siparişlerin order_id ve sipariş tarihini gösteren sorgu
+
+SELECT customers.first_name, customers.last_name, address.city, orders.order_id, orders.order_date
+FROM customers
+INNER JOIN address ON customers.customer_id = address.customer_id
+INNER JOIN orders ON customers.customer_id = orders.order_id
+WHERE addres.city = 'ankara';
+
+-- Kategori adı ‘Elektronik’ olan ürünlerin adını, birim fiyatını ve bu ürünleri sağlayan tedarikçinin adını listeleyen sorgu
+
+SELECT products.product_name, products.product_price, suppliers.supplier_name,  categories.cetegory_name
+FROM products
+INNER JOIN suppliers ON products.supplier_id = suppliers.supplier_id
+INNER JOIN categories ON products.category_id = categories.category_id
+WHERE categories.cetegory_name = 'elektronik';
+
+-- customer_id’si 2 olan müşterinin yaptığı siparişlerde hangi ürünleri sipariş ettiğini ve her ürünün sipariş adedini gösteren sorgu
+
+SELECT products.product_name, order_items.quantity, orders.order_id
+FROM order_items
+INNER JOIN order_items ON orders.order_id = order_items.order_id
+INNER JOIN products ON order_items.product_id = products.product_id
+WHERE orders.customer_id = 2 ;
+
+-- product_id’si 7 olan ürünün hangi kategoriye ait olduğunu ve bu ürünü sağlayan tedarikçinin adını listeleyen sorgu
+
+SELECT suppliers.supplier_name, products.product_name, categories.cetegory_name
+FROM products
+INNER JOIN categories ON products.category_id = categories.category_id
+INNER JOIN suppliers ON products.supplier_id = suppliers.supplier_id
+WHERE products.product_id = 7 ;
+
+-- Tüm müşterilerin yaptığı yorumlar ile yorum yapılan ürünün adını ve  yorum yapan müşterinin ad-soyadını listeleyen sorgu
+
+SELECT customers.first_name, customers.last_name, review.comment, products.product_name 
+FROM review
+INNER JOIN customers ON review.customer_id = customers.customer_id
+INNER JOIN products ON review.product_id = products.product_id
+
+
+
+
+
+ 
+ 
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
